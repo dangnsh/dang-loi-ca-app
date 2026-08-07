@@ -11,13 +11,12 @@ import {
   Pause, 
   Plus, 
   Minus, 
-  Type, 
   Layers, 
   ListMusic, 
   FileText, 
   Bookmark, 
-  Volume2,
   Sparkles,
+  Download,
   ExternalLink
 } from 'lucide-react';
 
@@ -73,6 +72,8 @@ export default function Home() {
     }
   };
 
+  const pdfUrl = selectedSong.pdf_file ? `/sheets/${encodeURIComponent(selectedSong.pdf_file)}` : null;
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950">
       {/* Header */}
@@ -113,7 +114,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Sidebar: Song List & Search */}
-        <div className="lg:col-span-4 flex flex-col gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 h-[calc(100vh-7rem)] sticky top-20">
+        <div className="lg:col-span-4 flex flex-col gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 lg:h-[calc(100vh-7rem)] lg:sticky lg:top-20">
           {/* Search Box */}
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
@@ -133,7 +134,7 @@ export default function Home() {
           </div>
 
           {/* Scrollable Song Items */}
-          <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 max-h-[400px] lg:max-h-none custom-scrollbar">
             {filteredSongs.map(s => {
               const isSelected = selectedSong.id === s.id;
               const inSetlist = setlist.some(item => item.id === s.id);
@@ -324,17 +325,48 @@ export default function Home() {
           )}
 
           {activeTab === 'sheet' && (
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[400px] gap-4">
-              <FileText className="w-12 h-12 text-amber-400 opacity-80" />
-              <div>
-                <h3 className="text-lg font-bold text-slate-200">Sheet nhạc PDF chuẩn</h3>
-                <p className="text-sm text-slate-400 mt-1 max-w-md">
-                  File PDF chính thức của bài DLC #{selectedSong.num}: <span className="text-amber-300 font-mono">{selectedSong.pdf_file}</span>
-                </p>
+            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-amber-400" />
+                  <span className="font-semibold text-slate-200">Sheet nhạc DLC #{selectedSong.num}</span>
+                  <span className="text-slate-400 font-mono">({selectedSong.pdf_file})</span>
+                </div>
+
+                {pdfUrl && (
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition flex items-center gap-1"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Mở tab mới</span>
+                    </a>
+                    <a
+                      href={pdfUrl}
+                      download={selectedSong.pdf_file}
+                      className="px-3 py-1.5 bg-slate-800 text-slate-200 font-medium rounded-lg hover:bg-slate-700 transition flex items-center gap-1"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Tải về</span>
+                    </a>
+                  </div>
+                )}
               </div>
-              <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-400 max-w-md text-left leading-relaxed">
-                📄 Sheet nhạc gốc từ tập Dâng Lời Ca đã được chia sẵn từng bài PDF riêng biệt trong thư mục dữ liệu local.
-              </div>
+
+              {pdfUrl ? (
+                <div className="w-full h-[700px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+                  <iframe 
+                    src={pdfUrl}
+                    className="w-full h-full border-0"
+                    title={`Sheet PDF ${selectedSong.title}`}
+                  />
+                </div>
+              ) : (
+                <div className="text-center py-12 text-slate-500">Chưa có file PDF sheet nhạc cho bài này</div>
+              )}
             </div>
           )}
 
