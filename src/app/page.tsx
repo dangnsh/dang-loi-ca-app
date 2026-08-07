@@ -3,6 +3,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import songsData from '@/data/songs.json';
 import { SongViewer } from '@/components/SongViewer';
+import { AbcSheetViewer } from '@/components/AbcSheetViewer';
+import { ABC_DATABASE } from '@/data/abcSongs';
 import { Song } from '@/lib/chordEngine';
 import { 
   Search, 
@@ -30,7 +32,7 @@ export default function Home() {
   const [showChords, setShowChords] = useState(true);
   const [displayMode, setDisplayMode] = useState<'stacked' | 'inline'>('inline');
   const [fontSize, setFontSize] = useState(18);
-  const [activeTab, setActiveTab] = useState<'chords' | 'sheet' | 'setlist'>('chords');
+  const [activeTab, setActiveTab] = useState<'chords' | 'sheet' | 'abc' | 'setlist'>('chords');
   
   // Auto scroll state
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
@@ -221,8 +223,17 @@ export default function Home() {
                   activeTab === 'sheet' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <FileText className="w-3.5 h-3.5" />
                 <span>Sheet PDF</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('abc')}
+                className={`px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 ${
+                  activeTab === 'abc' ? 'bg-amber-500 text-slate-950 font-bold text-amber-950' : 'text-emerald-400 hover:text-emerald-300'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Sheet Nốt Tương Tác</span>
               </button>
             </div>
           </div>
@@ -372,6 +383,60 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="text-center py-12 text-slate-500">Chưa có file PDF sheet nhạc cho bài này</div>
+              )}
+            </div>
+          )}
+
+          {/* Sheet Nốt Tương Tác (ABC) */}
+          {activeTab === 'abc' && (
+            <div className="space-y-4">
+              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                    <Sparkles className="w-4 h-4" /> Sheet Nhạc Số Tương Tác (Beta)
+                  </span>
+                  <span className="text-slate-400">• Bấm Tông (+/-) để đổi cao độ từng nốt nhạc trên khuôn</span>
+                </div>
+                <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                  <button 
+                    onClick={() => setSemitones(s => s - 1)}
+                    className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="px-2 font-mono font-bold text-amber-400">
+                    Tông: {semitones > 0 ? `+${semitones}` : semitones}
+                  </span>
+                  <button 
+                    onClick={() => setSemitones(s => s + 1)}
+                    className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                  {semitones !== 0 && (
+                    <button 
+                      onClick={() => setSemitones(0)}
+                      className="px-2 py-0.5 text-[10px] bg-slate-800 text-slate-400 hover:text-slate-200 rounded"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {ABC_DATABASE[selectedSong.num] ? (
+                <AbcSheetViewer 
+                  abcNotation={ABC_DATABASE[selectedSong.num]} 
+                  visualTranspose={semitones}
+                />
+              ) : (
+                <div className="p-8 text-center bg-slate-900/50 rounded-2xl border border-slate-800 text-slate-400 space-y-2">
+                  <Sparkles className="w-8 h-8 text-amber-400/50 mx-auto" />
+                  <p className="font-semibold text-slate-300">Chưa có Sheet Nốt Số cho bài #{selectedSong.num}</p>
+                  <p className="text-xs max-w-md mx-auto text-slate-400">
+                    Hiện tại tính năng thử nghiệm hỗ trợ Sheet Nốt Tương Tác cho các bài: <span className="text-amber-400">#1 (Ân Chúa dẫy đầy), #27 (Chỉ ân điển Chúa), #200 (Quyền trong huyết Giê-xu)</span>. Mời anh chọn các bài này để trải nghiệm tính năng dịch tông từng nốt nhạc!
+                  </p>
+                </div>
               )}
             </div>
           )}
