@@ -26,7 +26,7 @@ export const SongViewer: React.FC<SongViewerProps> = ({
 
   return (
     <div 
-      className="p-4 sm:p-6 bg-slate-900/90 rounded-2xl border border-slate-800 text-slate-100 font-sans leading-relaxed transition-all shadow-xl selection:bg-amber-500 selection:text-slate-900"
+      className="p-4 sm:p-6 bg-slate-900/90 rounded-2xl border border-slate-800 text-slate-100 font-sans leading-relaxed transition-all shadow-xl selection:bg-amber-500 selection:text-slate-900 overflow-x-hidden max-w-full break-words"
       style={{ fontSize: `${fontSize}px` }}
     >
       {lines.map((line, lineIdx) => {
@@ -62,9 +62,9 @@ export const SongViewer: React.FC<SongViewerProps> = ({
               }
 
               return (
-                <span key={tokenIdx} className="whitespace-pre">
+                <span key={tokenIdx} className="whitespace-pre-wrap break-words">
                   {showChords && transposed && (
-                    <span className="text-amber-400 font-bold mx-0.5 select-none bg-amber-500/10 px-1 py-0.5 rounded">
+                    <span className="text-amber-400 font-bold mx-0.5 select-none bg-amber-500/10 px-1 py-0.5 rounded inline-block">
                       [{transposed}]
                     </span>
                   )}

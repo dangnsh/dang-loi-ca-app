@@ -147,12 +147,12 @@ def extract_song(page_lines, start_p, end_p):
             if pending_chords:
                 merged = merge_chord_lyric(pending_chords, data)
                 if merged:
-                    out_lines.append(merged)
+                    out_lines.append(split_side_by_side(merged))
                 pending_chords = None
             else:
                 t = clean_lyric(join_lyric_words(data))
                 if t:
-                    out_lines.append(t)
+                    out_lines.append(split_side_by_side(t))
     return '\n'.join(out_lines)
 
 def join_lyric_words(words):
@@ -168,6 +168,17 @@ def join_lyric_words(words):
         parts.append(t)
         prev_x1 = w['x1']
     return ''.join(parts)
+
+def split_side_by_side(text):
+    """Split side-by-side lyrics separated by multiple spaces or '...' into separate lines."""
+    if '...' in text:
+        parts = [p.strip() for p in text.split('...') if p.strip()]
+        return '\n'.join(parts)
+    # If line has a large gap (>10 spaces) in middle
+    parts = re.split(r'\s{8,}', text)
+    if len(parts) > 1:
+        return '\n'.join(p.strip() for p in parts if p.strip())
+    return text
 
 def slug(title, num):
     nfkd = unicodedata.normalize('NFKD', title)
