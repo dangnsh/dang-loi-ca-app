@@ -16,7 +16,7 @@ export const SongViewer: React.FC<SongViewerProps> = ({
   content,
   semitones = 0,
   showChords = true,
-  displayMode = 'stacked',
+  displayMode = 'inline',
   fontSize = 18,
   useFlats = false,
 }) => {

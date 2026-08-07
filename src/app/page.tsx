@@ -28,7 +28,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [semitones, setSemitones] = useState(0);
   const [showChords, setShowChords] = useState(true);
-  const [displayMode, setDisplayMode] = useState<'stacked' | 'inline'>('stacked');
+  const [displayMode, setDisplayMode] = useState<'stacked' | 'inline'>('inline');
   const [fontSize, setFontSize] = useState(18);
   const [activeTab, setActiveTab] = useState<'chords' | 'sheet' | 'setlist'>('chords');
   

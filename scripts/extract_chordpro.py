@@ -36,9 +36,13 @@ def has_vietnamese(text):
     return bool(re.search(r'[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]', text, re.I))
 
 def clean_lyric(text):
-    t = text.replace('', '').replace('', '')
+    t = text.replace('', '').replace('', '')
     t = re.sub(r'[™œÓ˙w‰j„ŠŒ]', '', t)
     t = re.sub(r'\s+', ' ', t).strip()
+    # Heuristic: split glued words — lowercase followed by uppercase (e.g. áiđức, ChúaChúa)
+    # Vietnamese uppercase set included
+    upper = 'A-ZĂÂĐÊÔƠƯÁÀẢÃẠẤẦẨẪẬẮẰẲẴẶÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ'
+    t = re.sub(r'([a-zăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ])([' + upper + '])', r'\1 \2', t)
     return t
 
 def group_lines(words, y_tol=4):
@@ -159,7 +163,7 @@ def join_lyric_words(words):
         t = w['text']
         if JUNK_RE.match(t):
             continue
-        if prev_x1 is not None and (w['x0'] - prev_x1) > 1.5:
+        if prev_x1 is not None and (w['x0'] - prev_x1) > 0.8:
             parts.append(' ')
         parts.append(t)
         prev_x1 = w['x1']
@@ -184,7 +188,7 @@ page_lines = {}
 with pdfplumber.open(PDF_PATH) as pdf:
     total = len(pdf.pages)
     for p_idx, page in enumerate(pdf.pages):
-        words = page.extract_words(use_text_flow=False, keep_blank_chars=False)
+        words = page.extract_words(use_text_flow=False, keep_blank_chars=False, x_tolerance=1.2)
         page_lines[p_idx] = group_lines(words)
         if p_idx % 50 == 0:
             print(f"  page {p_idx+1}/{total}", flush=True)
