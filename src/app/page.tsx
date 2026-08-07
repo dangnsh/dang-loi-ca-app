@@ -17,7 +17,8 @@ import {
   Bookmark, 
   Sparkles,
   Download,
-  ExternalLink
+  ExternalLink,
+  Eye
 } from 'lucide-react';
 
 export default function Home() {
@@ -33,7 +34,7 @@ export default function Home() {
   
   // Auto scroll state
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  const [scrollSpeed, setScrollSpeed] = useState(2); // 1-5
+  const [scrollSpeed, setScrollSpeed] = useState(2);
   const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Setlist state
@@ -72,7 +73,11 @@ export default function Home() {
     }
   };
 
-  const pdfUrl = selectedSong.pdf_file ? `/sheets/${encodeURIComponent(selectedSong.pdf_file)}` : null;
+  const pdfUrl = selectedSong.pdf_file ? `/sheets/${selectedSong.pdf_file}` : null;
+  // Google Docs PDF Viewer embed URL for 100% reliable mobile viewing without iOS Safari / Zalo blocks
+  const googlePdfViewerUrl = pdfUrl 
+    ? `https://docs.google.com/viewer?url=${encodeURIComponent(`https://dang-loi-ca-app--worship-translator.asia-southeast1.hosted.app${pdfUrl}`)}&embedded=true` 
+    : null;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950">
@@ -114,7 +119,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Sidebar: Song List & Search */}
-        <div className="lg:col-span-4 flex flex-col gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 lg:h-[calc(100vh-7rem)] lg:sticky lg:top-20">
+        <div className="lg:col-span-4 flex flex-col gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80">
           {/* Search Box */}
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
@@ -134,7 +139,7 @@ export default function Home() {
           </div>
 
           {/* Scrollable Song Items */}
-          <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 max-h-[400px] lg:max-h-none custom-scrollbar">
+          <div className="overflow-y-auto space-y-1.5 pr-1 max-h-[350px] lg:max-h-[calc(100vh-16rem)] custom-scrollbar">
             {filteredSongs.map(s => {
               const isSelected = selectedSong.id === s.id;
               const inSetlist = setlist.some(item => item.id === s.id);
@@ -342,7 +347,7 @@ export default function Home() {
                       className="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition flex items-center gap-1"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Mở tab mới</span>
+                      <span>Xem trực tiếp PDF</span>
                     </a>
                     <a
                       href={pdfUrl}
@@ -350,16 +355,17 @@ export default function Home() {
                       className="px-3 py-1.5 bg-slate-800 text-slate-200 font-medium rounded-lg hover:bg-slate-700 transition flex items-center gap-1"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Tải về</span>
+                      <span>Tải file</span>
                     </a>
                   </div>
                 )}
               </div>
 
               {pdfUrl ? (
-                <div className="w-full h-[700px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+                <div className="w-full h-[650px] sm:h-[750px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner flex flex-col">
+                  {/* Google Docs Embedded Viewer for seamless rendering on iOS/Zalo mobile */}
                   <iframe 
-                    src={pdfUrl}
+                    src={googlePdfViewerUrl || pdfUrl}
                     className="w-full h-full border-0"
                     title={`Sheet PDF ${selectedSong.title}`}
                   />
