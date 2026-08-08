@@ -34,31 +34,35 @@ export const SongViewer: React.FC<SongViewerProps> = ({
 
         // Section Markers: [Verse 1], [Verse 2], [Chorus], [Bridge], [Outro]...
         if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-          const tag = trimmed.slice(1, -1);
-          let badgeColor = 'bg-slate-800 text-slate-300 border-slate-700';
-          let displayName = tag;
+          const inner = trimmed.slice(1, -1);
+          // Ensure it's a section marker, not a line starting and ending with chords e.g. [G]...[C]
+          if (!inner.includes('[') && !inner.includes(']')) {
+            const tag = inner;
+            let badgeColor = 'bg-slate-800 text-slate-300 border-slate-700';
+            let displayName = tag;
 
-          if (tag.toLowerCase().includes('verse 1') || tag.toLowerCase().includes('câu 1')) {
-            badgeColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
-            displayName = 'Verse 1 • Câu 1';
-          } else if (tag.toLowerCase().includes('verse 2') || tag.toLowerCase().includes('câu 2')) {
-            badgeColor = 'bg-teal-500/20 text-teal-400 border-teal-500/40';
-            displayName = 'Verse 2 • Câu 2';
-          } else if (tag.toLowerCase().includes('chorus') || tag.toLowerCase().includes('điệp khúc')) {
-            badgeColor = 'bg-amber-500/20 text-amber-400 border-amber-500/40';
-            displayName = 'Chorus • Điệp Khúc';
-          } else if (tag.toLowerCase().includes('bridge')) {
-            badgeColor = 'bg-purple-500/20 text-purple-400 border-purple-500/40';
-            displayName = 'Bridge • Đoạn Nối';
+            if (tag.toLowerCase().includes('verse 1') || tag.toLowerCase().includes('câu 1')) {
+              badgeColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
+              displayName = 'Verse 1 • Câu 1';
+            } else if (tag.toLowerCase().includes('verse 2') || tag.toLowerCase().includes('câu 2')) {
+              badgeColor = 'bg-teal-500/20 text-teal-400 border-teal-500/40';
+              displayName = 'Verse 2 • Câu 2';
+            } else if (tag.toLowerCase().includes('chorus') || tag.toLowerCase().includes('điệp khúc')) {
+              badgeColor = 'bg-amber-500/20 text-amber-400 border-amber-500/40';
+              displayName = 'Chorus • Điệp Khúc';
+            } else if (tag.toLowerCase().includes('bridge')) {
+              badgeColor = 'bg-purple-500/20 text-purple-400 border-purple-500/40';
+              displayName = 'Bridge • Đoạn Nối';
+            }
+
+            return (
+              <div key={lineIdx} className="pt-3 pb-1">
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.75em] font-bold border tracking-wide uppercase ${badgeColor}`}>
+                  {displayName}
+                </span>
+              </div>
+            );
           }
-
-          return (
-            <div key={lineIdx} className="pt-3 pb-1">
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.75em] font-bold border tracking-wide uppercase ${badgeColor}`}>
-                {displayName}
-              </span>
-            </div>
-          );
         }
 
         // Directives like {title:...} or author/meta notes
