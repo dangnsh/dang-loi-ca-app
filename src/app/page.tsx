@@ -75,7 +75,7 @@ export default function Home() {
     }
   };
 
-  const pdfUrl = selectedSong.pdf_file ? `/sheets/${selectedSong.pdf_file}` : null;
+  const pdfUrl = selectedSong.sheetUrl || (selectedSong.pdf_file ? `/sheets/${selectedSong.pdf_file}` : null);
   // Google Docs PDF Viewer embed URL for 100% reliable mobile viewing without iOS Safari / Zalo blocks
   const googlePdfViewerUrl = pdfUrl 
     ? `https://docs.google.com/viewer?url=${encodeURIComponent(`https://dang-loi-ca-app--worship-translator.asia-southeast1.hosted.app${pdfUrl}`)}&embedded=true` 
