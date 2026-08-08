@@ -4,7 +4,9 @@ export interface Song {
   title: string;
   composer?: string;
   lyricist?: string;
-  raw_text: string;
+  raw_text?: string;
+  content?: string;
+  sheetUrl?: string;
   pdf_file?: string;
   start_page?: number;
   end_page?: number;

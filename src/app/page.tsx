@@ -49,7 +49,7 @@ export default function Home() {
     return songs.filter(
       s => s.title.toLowerCase().includes(q) || 
            s.num.toString().includes(q) || 
-           s.raw_text.toLowerCase().includes(q)
+           (s.content || s.raw_text || '').toLowerCase().includes(q)
     );
   }, [searchQuery, songs]);
 
@@ -332,7 +332,7 @@ export default function Home() {
           {/* Main Viewer Render */}
           {activeTab === 'chords' && (
             <SongViewer 
-              content={selectedSong.chopro || selectedSong.raw_text}
+              content={selectedSong.content || selectedSong.chopro || selectedSong.raw_text || ''}
               semitones={semitones}
               showChords={showChords}
               displayMode={displayMode}
