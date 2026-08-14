@@ -24,3 +24,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* =====================================================================
+   make-interfaces-feel-better polish
+   ===================================================================== */
+
+/* 1. HIGH — visible keyboard focus on every interactive control.
+      Amber ring matches the app's accent; keeps outlines for a11y. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid theme(colors.amber.500 / 60%);
+  outline-offset: 2px;
+}
+
+/* 2. MEDIUM — the custom-scrollbar class was referenced but never defined.
+      Slim, theme-matched scrollbar for the song list / setlist panels. */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85 / 0.7); /* slate-700-ish */
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(71 85 105); /* slate-600 */
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(51 65 85 / 0.7) transparent; /* Firefox */
+}
+
+/* 3. LOW — balance long Vietnamese headings so a title never orphans
+      a single word onto the final line. */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}

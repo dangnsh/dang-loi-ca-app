@@ -229,7 +229,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveTab('abc')}
                 className={`px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 ${
-                  activeTab === 'abc' ? 'bg-amber-500 text-slate-950 font-bold text-amber-950' : 'text-emerald-400 hover:text-emerald-300'
+                  activeTab === 'abc' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-emerald-400 hover:text-emerald-300'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -246,7 +246,7 @@ export default function Home() {
               <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
                 <button 
                   onClick={() => setSemitones(s => s - 1)}
-                  className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition"
+                  className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition active:scale-[0.96]"
                   title="Giảm 1 bán cung"
                 >
                   <Minus className="w-3.5 h-3.5" />
@@ -256,7 +256,7 @@ export default function Home() {
                 </span>
                 <button 
                   onClick={() => setSemitones(s => s + 1)}
-                  className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition"
+                  className="p-1.5 rounded hover:bg-slate-800 text-slate-300 transition active:scale-[0.96]"
                   title="Tăng 1 bán cung"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -266,7 +266,7 @@ export default function Home() {
               {/* Display Mode (Stacked / Inline) */}
               <button
                 onClick={() => setDisplayMode(m => m === 'stacked' ? 'inline' : 'stacked')}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 transition active:scale-[0.96]"
               >
                 <Layers className="w-3.5 h-3.5 text-amber-400" />
                 <span>{displayMode === 'stacked' ? 'Trên đầu chữ' : 'Nội tuyến (Inline)'}</span>
@@ -276,7 +276,7 @@ export default function Home() {
               <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
                 <button 
                   onClick={() => setFontSize(f => Math.max(12, f - 2))}
-                  className="px-2 py-1 hover:bg-slate-800 rounded text-slate-300 font-bold"
+                  className="px-2 py-1 hover:bg-slate-800 rounded text-slate-300 font-bold active:scale-[0.96]"
                 >
                   A-
                 </button>
@@ -284,7 +284,7 @@ export default function Home() {
                 <span className="px-1 text-slate-400 font-mono">{fontSize}px</span>
                 <button 
                   onClick={() => setFontSize(f => Math.min(32, f + 2))}
-                  className="px-2 py-1 hover:bg-slate-800 rounded text-slate-300 font-bold"
+                  className="px-2 py-1 hover:bg-slate-800 rounded text-slate-300 font-bold active:scale-[0.96]"
                 >
                   A+
                 </button>
@@ -297,7 +297,7 @@ export default function Home() {
                   showChords 
                     ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-semibold' 
                     : 'bg-slate-950 border-slate-800 text-slate-500'
-                }`}
+                } active:scale-[0.96]`}
               >
                 <Music className="w-3.5 h-3.5" />
                 <span>Hợp âm</span>
@@ -309,7 +309,7 @@ export default function Home() {
                   onClick={() => setIsAutoScrolling(!isAutoScrolling)}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded transition text-xs font-semibold ${
                     isAutoScrolling ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                  }`}
+                  } active:scale-[0.96]`}
                 >
                   {isAutoScrolling ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                   <span>Cuộn</span>
@@ -355,7 +355,7 @@ export default function Home() {
                       href={pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition flex items-center gap-1"
+                      className="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition flex items-center gap-1 active:scale-[0.96]"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Xem trực tiếp PDF</span>
@@ -363,7 +363,7 @@ export default function Home() {
                     <a
                       href={pdfUrl}
                       download={selectedSong.pdf_file}
-                      className="px-3 py-1.5 bg-slate-800 text-slate-200 font-medium rounded-lg hover:bg-slate-700 transition flex items-center gap-1"
+                      className="px-3 py-1.5 bg-slate-800 text-slate-200 font-medium rounded-lg hover:bg-slate-700 transition flex items-center gap-1 active:scale-[0.96]"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Tải file</span>
@@ -488,7 +488,7 @@ export default function Home() {
                           e.stopPropagation();
                           toggleSetlist(s);
                         }}
-                        className="text-slate-500 hover:text-rose-400 p-1"
+                        className="text-slate-500 hover:text-rose-400 min-w-[44px] min-h-[44px] p-1 flex items-center justify-center"
                       >
                         ✕
                       </button>
